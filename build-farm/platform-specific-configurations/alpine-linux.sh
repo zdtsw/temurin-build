@@ -26,6 +26,11 @@ export CONFIGURE_ARGS_FOR_ANY_PLATFORM="${CONFIGURE_ARGS_FOR_ANY_PLATFORM} --dis
 export BUILD_ARGS="${BUILD_ARGS} --skip-freetype"
 
 BOOT_JDK_VARIABLE="JDK${JDK_BOOT_VERSION}_BOOT_DIR"
+
+echo "DEBUG START:"
+env
+echo $BOOT_JDK_VARIABLE
+echo "DEBUG DONE!"
 if [ ! -d "$(eval echo "\$$BOOT_JDK_VARIABLE")" ]; then
   bootDir="$PWD/jdk-$JDK_BOOT_VERSION"
   # Note we export $BOOT_JDK_VARIABLE (i.e. JDKXX_BOOT_DIR) here
