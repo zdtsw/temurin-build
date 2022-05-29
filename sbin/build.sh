@@ -621,12 +621,16 @@ buildCyclonedxLib() {
   local javaHome=""
 
   if [ ${JAVA_HOME+x} ] && [ -d "${JAVA_HOME}" ]; then
+    echo "DEBUG1: ${JAVA_HOME}"
     javaHome=${JAVA_HOME}
   elif [ ${JDK8_BOOT_DIR+x} ] && [ -d "${JDK8_BOOT_DIR}" ]; then
+    echo "DEBUG2: ${JDK8_BOOT_DIR}"
     javaHome=${JDK8_BOOT_DIR}
   elif [ ${JDK11_BOOT_DIR+x} ] && [ -d "${JDK11_BOOT_DIR}" ]; then
+    echo "DEBUG3: ${JDK11_BOOT_DIR}"
     javaHome=${JDK11_BOOT_DIR}
   elif [ ${JDK_BOOT_DIR+x} ] && [ -d "${JDK_BOOT_DIR}" ]; then # fall back to use JDK_BOOT_DIR which is set in make-adopt-build-farm.sh
+    echo "DEBUG4: ${JDK_BOOT_DIR}"
     javaHome=${JDK_BOOT_DIR}
   else
     echo "Unable to find a suitable JAVA_HOME to build the cyclonedx-lib"
@@ -639,6 +643,7 @@ buildCyclonedxLib() {
   else
     ANTBUILDFILE="${CYCLONEDB_DIR}/build.xml"
   fi
+  echo "DEBUG: JAVA_HOME=${javaHome} ant -f ${ANTBUILDFILE} clean"
   JAVA_HOME=${javaHome} ant -f "${ANTBUILDFILE}" clean
   JAVA_HOME=${javaHome} ant -f "${ANTBUILDFILE}" build
 }
