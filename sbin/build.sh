@@ -620,6 +620,20 @@ createOpenJDKFailureLogsArchive() {
 buildCyclonedxLib() {
   local javaHome=""
 
+  echo "DEBUG START:"
+  if [ ${JAVA_HOME+x} ]; then
+    echo "DEBUG1: ${JAVA_HOME}"
+  fi
+  if [ ${JDK8_BOOT_DIR+x} ]; then
+    echo "DEBUG2: ${JDK8_BOOT_DIR}"
+  fi
+  if [ ${JDK11_BOOT_DIR+x} ]; then
+    echo "DEBUG3: ${JDK11_BOOT_DIR}"
+  fi
+  if [ ${JDK_BOOT_DIR+x} ]; then
+    echo "DEBUG4: ${JDK_BOOT_DIR}"
+  fi
+  echo "DEBUG DONE!"
   if [ ${JAVA_HOME+x} ] && [ -d "${JAVA_HOME}" ]; then
     echo "DEBUG1: ${JAVA_HOME}"
     javaHome=${JAVA_HOME}
