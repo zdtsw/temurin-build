@@ -26,12 +26,22 @@ export CONFIGURE_ARGS_FOR_ANY_PLATFORM="${CONFIGURE_ARGS_FOR_ANY_PLATFORM} --dis
 export BUILD_ARGS="${BUILD_ARGS} --skip-freetype"
 
 BOOT_JDK_VARIABLE="JDK${JDK_BOOT_VERSION}_BOOT_DIR"
+
+echo "DEBUG START:"
+env
+echo $BOOT_JDK_VARIABLE
+ls -lat $(eval echo "\$$BOOT_JDK_VARIABLE")
+ls -lat /usr/lib/jvm/zulu11
+
+
 if [ ! -d "$(eval echo "\$$BOOT_JDK_VARIABLE")" ]; then
+  echo "DEBUG CALL0"
   bootDir="$PWD/jdk-$JDK_BOOT_VERSION"
   # Note we export $BOOT_JDK_VARIABLE (i.e. JDKXX_BOOT_DIR) here
   # instead of BOOT_JDK_VARIABLE (no '$').
   export "${BOOT_JDK_VARIABLE}"="$bootDir"
   if [ ! -d "$bootDir/bin" ]; then
+    echo "DEBUG RUN0: mkdir -p $bootDir"
     mkdir -p "$bootDir"
     releaseType="ga"
     apiUrlTemplate="https://api.adoptium.net/v3/binary/latest/\${JDK_BOOT_VERSION}/\${releaseType}/alpine-linux/\${ARCHITECTURE}/jdk/hotspot/normal/adoptium"
@@ -55,6 +65,7 @@ if [ ! -d "$(eval echo "\$$BOOT_JDK_VARIABLE")" ]; then
     fi
   fi
 fi
+echo "DEBUG DONE!"
 
 # shellcheck disable=SC2155
 export JDK_BOOT_DIR="$(eval echo "\$$BOOT_JDK_VARIABLE")"
