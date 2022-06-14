@@ -27,12 +27,18 @@ export BUILD_ARGS="${BUILD_ARGS} --skip-freetype"
 
 BOOT_JDK_VARIABLE="JDK${JDK_BOOT_VERSION}_BOOT_DIR"
 
+export JDK8_BOOT_DIR="/usr/lib/jvm/zulu8"
+export JDK10_BOOT_DIR="/usr/lib/jvm/zulu11"
+export JDK11_BOOT_DIR="/usr/lib/jvm/zulu11"
+export JDK16_BOOT_DIR="/usr/lib/jvm/zulu16"
+export JDK17_BOOT_DIR="/usr/lib/jvm/zulu17"
+export JDK18_BOOT_DIR="/usr/lib/jvm/zulu18"
+export JDK19_BOOT_DIR="/usr/lib/jvm/zulu18"
+
 echo "DEBUG START:"
 env
 echo $BOOT_JDK_VARIABLE
 ls -lat $(eval echo "\$$BOOT_JDK_VARIABLE")
-ls -lat /usr/lib/jvm/zulu11
-
 
 if [ ! -d "$(eval echo "\$$BOOT_JDK_VARIABLE")" ]; then
   echo "DEBUG CALL0"
@@ -40,6 +46,7 @@ if [ ! -d "$(eval echo "\$$BOOT_JDK_VARIABLE")" ]; then
   # Note we export $BOOT_JDK_VARIABLE (i.e. JDKXX_BOOT_DIR) here
   # instead of BOOT_JDK_VARIABLE (no '$').
   export "${BOOT_JDK_VARIABLE}"="$bootDir"
+  ls -lat "$bootDir/bin"
   if [ ! -d "$bootDir/bin" ]; then
     echo "DEBUG RUN0: mkdir -p $bootDir"
     mkdir -p "$bootDir"
