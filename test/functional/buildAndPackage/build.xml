@@ -54,10 +54,24 @@
             <fileset dir="${build}"/>
             <fileset dir="${src}/../" includes="*.properties,*.xml"/>
         </jar>
+        <echo>============PRE COPY===========</echo>
+        <exec executable="/bin/bash">
+            <arg value="ls -lat"/>
+            <arg value="${src}/../"/>
+            <arg value="${DEST}/BuildAndPackagingTests.jar"/>
+        </exec>
         <copy todir="${DEST}">
             <fileset dir="${src}/../" includes="*.xml"/>
             <fileset dir="${src}/../" includes="*.mk"/>
         </copy>
+    </target>
+
+    <target name="debugwen1" depends="dist" description="debugging">
+        <echo>============POST COPY===========</echo>
+        <exec executable="/bin/bash">
+            <arg value="ls"/>
+            <arg value="${DEST}"/>
+        </exec>
     </target>
 
     <target name="clean" depends="dist" description="clean up">
