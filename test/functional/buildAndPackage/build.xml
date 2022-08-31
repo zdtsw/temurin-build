@@ -55,8 +55,7 @@
             <fileset dir="${src}/../" includes="*.properties,*.xml"/>
         </jar>
         <copy todir="${DEST}" force="true" overwrite="true" verbose="true">
-            <fileset dir="${src}/../" includes="*.xml"/>
-            <fileset dir="${src}/../" includes="*.mk"/>
+            <fileset dir="${src}/../" includes="*.xml,*.mk"/>
         </copy>
     </target>
 
