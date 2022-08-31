@@ -54,6 +54,9 @@
             <fileset dir="${build}"/>
             <fileset dir="${src}/../" includes="*.properties,*.xml"/>
         </jar>
+        <exec executable="ls" failonerror="true"> 
+            <arg line="-lat ${DEST}"/> 
+        </exec> 
         <fail message="testng.xml is missing.">
             <condition>
                 <not>
