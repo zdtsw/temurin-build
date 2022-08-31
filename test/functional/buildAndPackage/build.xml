@@ -65,7 +65,7 @@
             </condition>
         </fail>
         <exec executable="cp" failonerror="true"> 
-            <arg line="${src}/../testng.xml ${DEST}"/> 
+            <arg line="${src}/../*.xml ${DEST}"/> 
         </exec> 
     </target>
 
