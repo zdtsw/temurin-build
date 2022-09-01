@@ -284,6 +284,10 @@ createWorkspace() {
   mkdir -p "${BUILD_CONFIG[WORKSPACE_DIR]}/${BUILD_CONFIG[WORKING_DIR]}" || exit
 }
 
+# install strace 
+installStrace() {
+  yum install strace -y
+}
 # ALSA first for sound
 checkingAndDownloadingAlsa() {
   cd "${BUILD_CONFIG[WORKSPACE_DIR]}/libs/" || exit
@@ -556,6 +560,11 @@ downloadingRequiredDependencies() {
   else
     echo "Checking and downloading Alsa dependency"
     checkingAndDownloadingAlsa
+  fi
+
+  if [[ "$OSTYPE" == "linux-gnu" ]] ; then
+    echo "install Strace"
+    installStrace
   fi
 
   if [[ "${BUILD_CONFIG[BUILD_VARIANT]}" == "${BUILD_VARIANT_OPENJ9}" ]]; then

@@ -1785,7 +1785,7 @@ parseArguments "$@"
 
 if [[ "${BUILD_CONFIG[ASSEMBLE_EXPLODED_IMAGE]}" == "true" ]]; then
   configureCommandParameters
-  buildTemplatedFile
+  buildTemplatedFile 
   executeTemplatedFile
   printJavaVersionString
   addInfoToReleaseFile
@@ -1820,7 +1820,7 @@ configureCommandParameters
 buildTemplatedFile
 executeTemplatedFile
 
-parseStraceFiles
+
 echo "build.sh : $(date +%T) : Build complete ..."
 
 if [[ "${BUILD_CONFIG[MAKE_EXPLODED]}" != "true" ]]; then
