@@ -607,7 +607,7 @@ executeTemplatedFile() {
   fi
   stepIntoTheWorkingDirectory
 
-  echo "Currently at we are at '${PWD}'"
+  echo "Currently we are at '${PWD}'"
 
   # We need the exitcode from the configure-and-build.sh script
   set +eu
@@ -634,6 +634,18 @@ executeTemplatedFile() {
 
   # Restore exit behavior
   set -eu
+}
+
+parseStraceFiles(){
+  stepIntoTheWorkingDirectory
+  echo "#### Process strace files"
+  grep -v ENOENT strace.* | cut -d'"' -f2 | grep -v "/jdk/" | grep "^/" | grep -v "^/proc/" | grep -v "^/tmp/" | grep -v "^/dev"  | sort | uniq  > result.txt
+  echo "#### content of result.txt"
+  cat result.txt
+  echo "#### list all packages installed by rpm"
+  cat result.txt | while read F; do rpm -qf "$F"; done | sort | uniq
+  echo "#### list all packages not from rpm"
+  cat result.txt | while read F; do rpm -qf "$F"; done | sort | uniq | grep -v "is not owned"
 }
 
 createOpenJDKFailureLogsArchive() {
@@ -1808,6 +1820,7 @@ configureCommandParameters
 buildTemplatedFile
 executeTemplatedFile
 
+parseStraceFiles
 echo "build.sh : $(date +%T) : Build complete ..."
 
 if [[ "${BUILD_CONFIG[MAKE_EXPLODED]}" != "true" ]]; then
