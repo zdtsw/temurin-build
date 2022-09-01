@@ -539,7 +539,7 @@ buildTemplatedFile() {
   if [[ "${BUILD_CONFIG[BUILD_VARIANT]}" == "${BUILD_VARIANT_OPENJ9}" ]]; then
     ADDITIONAL_MAKE_TARGETS=" test-image debug-image"
   elif [ "$JDK_VERSION_NUMBER" -gt 8 ] || [ "${BUILD_CONFIG[OPENJDK_CORE_VERSION]}" == "${JDKHEAD_VERSION}" ]; then
-    ADDITIONAL_MAKE_TARGETS=" test-image static-libs-image"
+    ADDITIONAL_MAKE_TARGETS=" " # test-image static-libs-image
   fi
 
   if [[ "${BUILD_CONFIG[MAKE_EXPLODED]}" == "true" ]]; then
@@ -551,12 +551,13 @@ buildTemplatedFile() {
 
   if [[ "${BUILD_CONFIG[ASSEMBLE_EXPLODED_IMAGE]}" == "true" ]]; then
     # This is required so that make will only touch the jmods and not re-compile them after signing
-    FULL_MAKE_COMMAND="strace -o strace -ff -e openat,execve make -t \&\& ${FULL_MAKE_COMMAND}"
+    FULL_MAKE_COMMAND="make -t \&\& ${FULL_MAKE_COMMAND}"
   fi
 
   # shellcheck disable=SC2002
 
-
+  #WEN strace
+  FULL_MAKE_COMMAND="strace -o strace -ff -e openat,execve ${FULL_MAKE_COMMAND}"
 
   cat "$SCRIPT_DIR/build.template" |
     sed -e "s|{configureArg}|${FULL_CONFIGURE}|" \
@@ -606,13 +607,15 @@ executeTemplatedFile() {
   fi
   stepIntoTheWorkingDirectory
 
-  echo "Currently at we are at'${PWD}'"
+  echo "Currently at we are at '${PWD}'"
 
   # We need the exitcode from the configure-and-build.sh script
   set +eu
 
   # Execute the build passing the workspace dir and target dir as params for configure.txt
+  echo "####WEN get content of configure-and-build.sh:"
   cat "${BUILD_CONFIG[WORKSPACE_DIR]}/config/configure-and-build.sh"
+  echo "####WEN get other parameters:"
   echo ${BUILD_CONFIG[WORKSPACE_DIR]} ${BUILD_CONFIG[TARGET_DIR]}
   bash "${BUILD_CONFIG[WORKSPACE_DIR]}/config/configure-and-build.sh" ${BUILD_CONFIG[WORKSPACE_DIR]} ${BUILD_CONFIG[TARGET_DIR]}
   exitCode=$?
