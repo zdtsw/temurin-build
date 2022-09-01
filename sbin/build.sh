@@ -640,14 +640,14 @@ parseStraceFiles(){
   stepIntoTheWorkingDirectory
   allFile=$(ls -lat)
   echo "#### All files: ${allFile}" 
-  echo "#### Process strace files"
-  grep -v ENOENT strace.* | cut -d'"' -f2 | grep -v "/jdk/" | grep "^/" | grep -v "^/proc/" | grep -v "^/tmp/" | grep -v "^/dev"  | sort | uniq  > result.txt
-  echo "#### content of result.txt"
-  cat result.txt
-  echo "#### list all packages installed by rpm"
-  cat result.txt | while read F; do rpm -qf "$F"; done | sort | uniq
-  echo "#### list all packages not from rpm"
-  cat result.txt | while read F; do rpm -qf "$F"; done | sort | uniq | grep -v "is not owned"
+  echo "#### Process strace files:"
+  sortFiles=$(grep -v ENOENT strace.* | cut -d'"' -f2 | grep -v "/jdk/" | grep "^/" | grep -v "^/proc/" | grep -v "^/tmp/" | grep -v "^/dev"  | sort | uniq)
+  echo "${sortFiles}"
+  echo "#### list all packages installed by rpm or not"
+  echo "${sortFiles}" | while read F;
+  do
+    echo $(rpm -qf "$F")
+  done
 }
 
 createOpenJDKFailureLogsArchive() {
