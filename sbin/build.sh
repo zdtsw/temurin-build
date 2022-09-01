@@ -551,10 +551,13 @@ buildTemplatedFile() {
 
   if [[ "${BUILD_CONFIG[ASSEMBLE_EXPLODED_IMAGE]}" == "true" ]]; then
     # This is required so that make will only touch the jmods and not re-compile them after signing
-    FULL_MAKE_COMMAND="make -t \&\& ${FULL_MAKE_COMMAND}"
+    FULL_MAKE_COMMAND="strace -o strace -ff -e openat,execve make -t \&\& ${FULL_MAKE_COMMAND}"
   fi
 
   # shellcheck disable=SC2002
+
+
+
   cat "$SCRIPT_DIR/build.template" |
     sed -e "s|{configureArg}|${FULL_CONFIGURE}|" \
       -e "s|{makeCommandArg}|${FULL_MAKE_COMMAND}|" >"${BUILD_CONFIG[WORKSPACE_DIR]}/config/configure-and-build.sh"
@@ -603,12 +606,14 @@ executeTemplatedFile() {
   fi
   stepIntoTheWorkingDirectory
 
-  echo "Currently at '${PWD}'"
+  echo "Currently at we are at'${PWD}'"
 
   # We need the exitcode from the configure-and-build.sh script
   set +eu
 
   # Execute the build passing the workspace dir and target dir as params for configure.txt
+  cat "${BUILD_CONFIG[WORKSPACE_DIR]}/config/configure-and-build.sh"
+  echo ${BUILD_CONFIG[WORKSPACE_DIR]} ${BUILD_CONFIG[TARGET_DIR]}
   bash "${BUILD_CONFIG[WORKSPACE_DIR]}/config/configure-and-build.sh" ${BUILD_CONFIG[WORKSPACE_DIR]} ${BUILD_CONFIG[TARGET_DIR]}
   exitCode=$?
 
