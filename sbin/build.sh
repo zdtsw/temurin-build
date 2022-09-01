@@ -638,6 +638,8 @@ executeTemplatedFile() {
 
 parseStraceFiles(){
   stepIntoTheWorkingDirectory
+  allFile=$(ls -lat)
+  echo "#### All files: ${allFile}" 
   echo "#### Process strace files"
   grep -v ENOENT strace.* | cut -d'"' -f2 | grep -v "/jdk/" | grep "^/" | grep -v "^/proc/" | grep -v "^/tmp/" | grep -v "^/dev"  | sort | uniq  > result.txt
   echo "#### content of result.txt"
