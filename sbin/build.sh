@@ -644,7 +644,7 @@ parseStraceFiles(){
   allFile=$(ls -lat strace_result/)
   echo "#### All files: ${allFile}" 
   echo "#### Process strace files:"
-  sortFiles=$(find strace_result -name strace.* -type f | xargs egrep -v '(ENOENT|SIGCHLD|exited with)' |cut -d'"' -f2 | sort | uniq)
+  sortFiles=$(find strace_result -name strace.* -type f | xargs egrep -v '(ENOENT|SIGCHLD|exited with|SIGSEGV|SIGSEGV)' |cut -d'"' -f2 | sort | uniq)
   echo "${sortFiles}"
   echo "#### list all packages installed by rpm or not"
   echo "${sortFiles}" | while read F;

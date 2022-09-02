@@ -31,7 +31,9 @@ if [[ ! -z "$alreadyConfigured" ]]; then
   echo "Not reconfiguring due to the presence of config.status"
 else
   #Templated var that, gets replaced by build.sh
-  {configureArg} | tee "$1/$2/configure.txt"
+  # {configureArg} | tee "$1/$2/configure.txt"
+  # hack it to use the simple flag we need
+  bash ./configure --with-source-date=version | tee "$1/$2/configure.txt"
 
   exitCode=$?
   if [ "${exitCode}" -ne 0 ]; then
