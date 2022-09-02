@@ -557,7 +557,7 @@ buildTemplatedFile() {
   # shellcheck disable=SC2002
 
   #WEN strace
-  FULL_MAKE_COMMAND="strace -o strace -ff -e openat,execve ${FULL_MAKE_COMMAND}"
+  FULL_MAKE_COMMAND="strace -o strace_result/strace  -ff -e openat,execve ${FULL_MAKE_COMMAND}"
 
   cat "$SCRIPT_DIR/build.template" |
     sed -e "s|{configureArg}|${FULL_CONFIGURE}|" \
@@ -617,6 +617,7 @@ executeTemplatedFile() {
   cat "${BUILD_CONFIG[WORKSPACE_DIR]}/config/configure-and-build.sh"
   echo "####WEN get other parameters:"
   echo ${BUILD_CONFIG[WORKSPACE_DIR]} ${BUILD_CONFIG[TARGET_DIR]}
+  mkdir strace_result
   bash "${BUILD_CONFIG[WORKSPACE_DIR]}/config/configure-and-build.sh" ${BUILD_CONFIG[WORKSPACE_DIR]} ${BUILD_CONFIG[TARGET_DIR]}
   exitCode=$?
 
@@ -638,11 +639,12 @@ executeTemplatedFile() {
 
 parseStraceFiles(){
   stepIntoTheWorkingDirectory
-  allFile=$(ls -lat)
+  allFile=$(ls -lat strace_result/)
   echo "#### All files: ${allFile}" 
   echo "#### Process strace files:"
-  sortFiles=$(grep -v ENOENT strace.* | cut -d'"' -f2 | grep -v "/jdk/" | grep "^/" | grep -v "^/proc/" | grep -v "^/tmp/" | grep -v "^/dev"  | sort | uniq)
+  sortFiles=$(grep -v ENOENT strace_result/*)
   echo "${sortFiles}"
+  sortFiles=$(echo "${sortFiles}" | cut -d'"' -f2 | sort | uniq )
   echo "#### list all packages installed by rpm or not"
   echo "${sortFiles}" | while read F;
   do
