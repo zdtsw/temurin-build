@@ -33,7 +33,7 @@ else
   #Templated var that, gets replaced by build.sh
   # {configureArg} | tee "$1/$2/configure.txt"
   # hack it to use the simple flag we need
-  bash ./configure --with-source-date=version | tee "$1/$2/configure.txt"
+  bash ./configure --with-source-date=version -with-boot-jdk=/home/jenkins/workspace/wen_strace_list_0/jdk-19 | tee "$1/$2/configure.txt"
 
   exitCode=$?
   if [ "${exitCode}" -ne 0 ]; then
