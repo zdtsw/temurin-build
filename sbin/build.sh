@@ -620,6 +620,7 @@ executeTemplatedFile() {
   mkdir strace_result
   bash "${BUILD_CONFIG[WORKSPACE_DIR]}/config/configure-and-build.sh" ${BUILD_CONFIG[WORKSPACE_DIR]} ${BUILD_CONFIG[TARGET_DIR]}
   exitCode=$?
+  createStraceArchive
 
   if [ "${exitCode}" -eq 3 ]; then
     createOpenJDKFailureLogsArchive
@@ -633,6 +634,7 @@ executeTemplatedFile() {
     exit 2
   fi
 
+  
   # Restore exit behavior
   set -eu
 }
@@ -642,16 +644,18 @@ parseStraceFiles(){
   allFile=$(ls -lat strace_result/)
   echo "#### All files: ${allFile}" 
   echo "#### Process strace files:"
-  sortFiles=$(find strace_result -name strace.* -type f | xargs grep -v ENOENT)
+  sortFiles=$(find strace_result -name strace.* -type f | xargs egrep -v '(ENOENT|SIGCHLD|exited with)' |cut -d'"' -f2 | sort | uniq)
   echo "${sortFiles}"
-  sortFiles=$(echo "${sortFiles}" | cut -d'"' -f2 | sort | uniq )
   echo "#### list all packages installed by rpm or not"
   echo "${sortFiles}" | while read F;
   do
     echo $(rpm -qf "$F")
   done
 }
-
+createStraceArchive() {
+  echo "archive all strace files for local investigation"
+  createArchive strace_result strace_archivefile
+}
 createOpenJDKFailureLogsArchive() {
     echo "OpenJDK make failed, archiving make failed logs"
     cd build/*
